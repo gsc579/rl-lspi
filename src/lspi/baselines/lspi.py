@@ -38,6 +38,9 @@ class LSPolicyIteration:
         self.memory_type = memory_type
 
     def init_memory(self):
+        """
+        如果是episode类型的将采样得到的数据存储在memory中
+        """
         self.memory = []
         count = 0
         done = True
@@ -59,9 +62,13 @@ class LSPolicyIteration:
             self.A_all = np.zeros(
                 (len(self.memory), nActions, k * nActions, k * nActions))
             self.b_all = np.zeros(k * nActions)
+            """
+            怎么知道A，b数组的维数的
+            """
             for idx, sample in enumerate(self.memory):
                 # state features
                 feat_s = np.zeros(k * nActions)
+                #为啥特征的维数要乘以nActions
                 a = sample.a
                 feat_s[a * k:(a + 1) * k] = self.agent.get_features(sample.s)
                 # next state features
