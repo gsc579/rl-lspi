@@ -11,7 +11,7 @@ class RadialAgent(Agent):
         super(RadialAgent, self).__init__(env, preprocess_obs)
 
     def _get_features(self, obs):
-        dists = np.power(self.centers - obs, 2)
+        dists = np.power(self.centers - obs, 2)#power(x, y) 函数，计算 x 的 y 次方
         rbfs = np.exp(-dists.sum(1) / (2 * self.sigma2))
         return np.append(rbfs, [1.])
 
