@@ -19,7 +19,7 @@ class LSPolicyIteration:
             env (gym.Env): gym environment.
             agent (lspi.agents.Agent): features policy.
             gamma (float): discount factor.
-            memory_size (int): number of training samples/episodes.
+            memory_size (int): number of training samples/episodes.  samples/episodes分别是啥意思
             memory_type (str, optional): samples collecting method. Defaults to 'sample'.
             eval_type (str, optional): policy evaluation method. Defaults to 'batch'.
         """
@@ -47,20 +47,20 @@ class LSPolicyIteration:
         while count < (self.memory_size + 1):
             if done:
                 obs = self.env.reset()
-                if self.memory_type == 'episode':
+                if self.memory_type == 'episode': #samples/episodes分别是啥意思
                     count += 1
             action = self.env.action_space.sample()
             next_obs, reward, done, _ = self.env.step(action)
             self.memory.append(Sample(obs, action, reward, next_obs))
             obs = next_obs
-            if self.memory_type == 'sample':
+            if self.memory_type == 'sample':#samples/episodes分别是啥意思
                 count += 1
 
         if self.eval_type == 'batch':
             k = self.agent.features_size
             nActions = self.agent.action_size
             self.A_all = np.zeros(
-                (len(self.memory), nActions, k * nActions, k * nActions))
+                (len(self.memory), nActions, k * nActions, k * nActions))#4维啥意思
             self.b_all = np.zeros(k * nActions)
             """
             怎么知道A，b数组的维数的
