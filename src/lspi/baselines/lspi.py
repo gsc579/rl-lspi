@@ -67,10 +67,14 @@ class LSPolicyIteration:
             """
             for idx, sample in enumerate(self.memory):
                 # state features
-                feat_s = np.zeros(k * nActions)
+                feat_s = np.zeros(k * nActions)#开辟一个新的数组
                 #为啥特征的维数要乘以nActions
-                a = sample.a
-                feat_s[a * k:(a + 1) * k] = self.agent.get_features(sample.s)
+                a = sample.a #动作
+                feat_s[a * k:(a + 1) * k] = self.agent.get_features(sample.s) 
+                #状态为s的特征存储在feat_s[a * k:(a + 1) * k]里，为啥是a * k:(a + 1) * k呢？
+                #因为a是在s下选择的，又因为每个特征要占k个索引区间（k = self.agent.features_size）（猜的）
+                #[m:n] #切片操作，取a[m]~a[n-1]之间的内容，m\n可以为负，m>n时返回空
+                
                 # next state features
                 feat_ = self.agent.get_features(sample.s_)
                 for a_ in range(nActions):
@@ -126,6 +130,7 @@ class LSPolicyIteration:
                 self.A_all[idx, self.agent.predict(sample.s_)]
                 for idx, sample in enumerate(self.memory)
             ]).sum(0)
+            #sum(0) 用途：求数组每一列的和，等价于sum(axis=0),   1 行和
             b = self.b_all
             w = np.linalg.solve(A, b)
         return w
